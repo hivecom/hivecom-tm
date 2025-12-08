@@ -110,14 +110,14 @@ export default div<RouteProps<[number[], TrackmaniaMap[], TrackmaniaPlayer[]]>>(
         modelValue: envFilters,
       }).style({ 'min-width': '156px' }),
       InputSelect().props({
-        label: 'Player',
-        options: plaOptions,
-        modelValue: plaFilters,
-      }).style({ 'min-width': '136px' }),
-      InputSelect().props({
         label: 'Author',
         options: autOptions,
         modelValue: autFilters,
+      }).style({ 'min-width': '136px' }),
+      InputSelect().props({
+        label: 'Player',
+        options: plaOptions,
+        modelValue: plaFilters,
       }).style({ 'min-width': '136px' }),
       InputCheckbox().props({
         modelValue: showFormattedNames,
