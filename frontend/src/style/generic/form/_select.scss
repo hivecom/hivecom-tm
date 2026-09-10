@@ -17,6 +17,10 @@
     background-color: transparent;
     font-size: 1.6rem;
 
+    span {
+      font-size: inherit;
+    }
+
     svg {
       transform: translateY(2px);
     }

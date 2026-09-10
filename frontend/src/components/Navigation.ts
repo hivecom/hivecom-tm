@@ -18,7 +18,7 @@ function isDefaultDark() {
 export default function () {
   const activeButton = ref('records')
   const buttons = ['records', 'stats', 'players']
-  const loading = ref(false)
+  const loading = ref(true)
 
   onNavigation(() => {
     loading.value = true

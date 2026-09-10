@@ -54,7 +54,7 @@ export default reusable<Props>('div', (ctx, props) => {
       .class('select-button')
       .click(() => open.value = !open.value)
       .nest(
-        labelToShow,
+        span().text(labelToShow),
         span().html(Icon.chevronDown),
       ),
     div().if(open).class('form-select-dropdown').for(props.options, (option: string) => {

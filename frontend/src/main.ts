@@ -1,6 +1,5 @@
-import type { TrackmaniaMap, TrackmaniaPlayer } from './types'
 import { createApp } from '@dolanske/pantry'
-import { getRecords, maps, players } from './api'
+import { getMaps, getPlayers, getRecords } from './api'
 import Navigation from './components/Navigation'
 import RouteList from './routes/RouteList'
 import RoutePlayers from './routes/RoutePlayers'
@@ -14,8 +13,8 @@ export const app = createApp({
     loader: () => {
       return Promise.all([
         getRecords(),
-        maps.get<TrackmaniaMap[]>(),
-        players.get<TrackmaniaPlayer[]>(),
+        getMaps(),
+        getPlayers(),
       ])
     },
   },
@@ -23,14 +22,14 @@ export const app = createApp({
     component: RouteStats,
     loader: () => {
       return Promise.all([
-        maps.get<TrackmaniaMap[]>(),
-        players.get<TrackmaniaPlayer[]>(),
+        getMaps(),
+        getPlayers(),
       ])
     },
   },
   '/players': {
     component: RoutePlayers,
-    loader: () => players.get<TrackmaniaPlayer[]>(),
+    loader: () => getPlayers(),
   },
 })
 

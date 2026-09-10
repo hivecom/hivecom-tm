@@ -1,6 +1,6 @@
 import type { Component } from '@dolanske/cascade'
 
-export function onClickOutside(ctx: Component, onClose: () => void) {
+export function onClickOutside(ctx: Component<any>, onClose: () => void) {
   function handler(e: MouseEvent) {
     if (e.target && ctx.el && !ctx.el.contains(e.target as HTMLElement)) {
       onClose()
