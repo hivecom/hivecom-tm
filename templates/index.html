@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>TM Records | Hivecom</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+
+    <link rel="stylesheet" type="text/css" href="../static/reset.css" />
+    <link rel="stylesheet" type="text/css" href="../static/css/index.css" />
+
+    <script src="../static/js/vue.js"></script>
+  </head>
+
+  <body>
+    <main id="app">
+      <div class="container">
+        <div class="description">
+          <h1>Trackmania Leaderboars</h1>
+          <p>
+            Collection of maps and records driven by our community's members on
+            <br />
+            the <strong>hivecom</strong> Trackmania Nations Forever server.
+          </p>
+
+          <!-- <p class="credits">
+            Made by <strong>Jokler</strong> & <strong>dolanske</strong>.
+          </p> -->
+        </div>
+      </div>
+
+      <noscript>
+        <div class="container">
+          <div class="legend">
+            <span>Track</span>
+            <span>Best Time</span>
+          </div>
+
+          <!-- prettier-ignore -->
+          {% for (map, records) in maps %} 
+          {% let record=records.get(0).unwrap() %}
+          <div
+            class="track"
+            data-keyword="{{map.name}}{{record.player}}"
+            id="{{map.id}}"
+          >
+            <details>
+              <summary>
+                <div class="track-name">
+                  <h2>{{map.name|safe}}</h2>
+                  <span>{{map.author}}</span>
+                </div>
+
+                <div class="track-record">
+                  <strong>{{record.time}}</strong>
+                  <p>{{record.player}}</p>
+                </div>
+              </summary>
+
+              <div class="track-content">
+                {% for record in records %}
+                <div class="track-time">
+                  <strong>{{record.time}}</strong>
+                  <div class="track-player">
+                    <img
+                      src="static/flags/{{record.country}}.svg"
+                      alt="{{record.country}}"
+                    />
+                    <p>{{record.player}}</p>
+                  </div>
+                  <span>{{record.date}}</span>
+                </div>
+                {% endfor %}
+              </div>
+            </details>
+          </div>
+          {% endfor %}
+        </div>
+      </noscript>
+
+      <app></app>
+    </main>
+  </body>
+  <script src="../static/js/main.js"></script>
+</html>
