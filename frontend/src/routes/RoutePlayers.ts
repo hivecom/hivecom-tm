@@ -1,13 +1,13 @@
-import type { RouteProps, TrackmaniaPlayer } from '../types'
-import { div, p, span, strong, table, tbody, td, th, thead, tr } from '@dolanske/cascade'
-import { Link } from '@dolanske/pantry'
-import { computed, ref } from '@vue/reactivity'
+import type { RouteProps } from '@dolanske/pantry'
+import type { TrackmaniaPlayer } from '../types'
+import { computed, div, Link, p, ref, span, strong, table, tbody, td, th, thead, tr } from '@dolanske/pantry'
+
 import InputSearch from '../components/form/InputSearch'
 import Player from '../components/Player'
 import { searchInStr } from '../util/search-in'
 import { timeAgo } from '../util/time'
 
-export default div<RouteProps<TrackmaniaPlayer[]>>('div').setup((ctx, props) => {
+export default div<RouteProps<TrackmaniaPlayer[]>>().setup((ctx, props) => {
   const $players = props.$data
   const search = ref('')
   const toRender = computed(() => {
@@ -36,7 +36,7 @@ export default div<RouteProps<TrackmaniaPlayer[]>>('div').setup((ctx, props) => 
         ),
         tbody().for(toRender, (item, index) => {
           const { name, country, records, maps, latest } = item
-          return tr().nest([
+          return tr().key(name).nest([
             td().nest([
               span(`#${index + 1}`).class('player-position'),
               Player().props({ player: name, country }),

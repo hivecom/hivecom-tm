@@ -1,6 +1,6 @@
 import type { TrackmaniaMap } from '../../types'
-import { canvas, div, h5, li, span, strong, ul } from '@dolanske/cascade'
-import { navigate } from '@dolanske/crumbs'
+import { canvas, div, h5, li, navigate, span, strong, ul } from '@dolanske/pantry'
+
 import { Chart } from 'chart.js'
 import { PieOptions } from '../../util/common'
 import { convertTimeToMs } from '../../util/format'
@@ -85,8 +85,8 @@ export default function ProcessMaps(data: TrackmaniaMap[]) {
       div(
         div().class('chart-wrap').nest(
           canvas().id('environment-chart').setup((ctx) => {
-            ctx.onMount(() =>
-              new Chart(
+            ctx.onMount(() => {
+              const chart = new Chart(
                 ctx.el as HTMLCanvasElement,
                 {
                   ...PieOptions,
@@ -97,8 +97,9 @@ export default function ProcessMaps(data: TrackmaniaMap[]) {
                     }],
                   },
                 },
-              ),
-            )
+              )
+              return () => chart.destroy()
+            })
           }),
         ),
       ),

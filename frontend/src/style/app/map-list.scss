@@ -6,6 +6,9 @@
     border-radius: 12px;
     background-color: var(--color-bg-base);
 
+    content-visibility: auto;
+    contain-intrinsic-size: auto 1000px;
+
     .empty-state {
       @include flex(0, center, center);
       padding: 64px;

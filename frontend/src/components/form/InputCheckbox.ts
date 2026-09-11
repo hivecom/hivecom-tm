@@ -1,5 +1,5 @@
-import type { Ref } from '@vue/reactivity'
-import { createId, input, label, reusable } from '@dolanske/cascade'
+import type { Ref } from '@dolanske/pantry'
+import { createId, input, label, reusable } from '@dolanske/pantry'
 
 interface Props {
   modelValue: Ref<boolean>
@@ -14,7 +14,7 @@ export default reusable<Props>('div', (ctx, props) => {
     input('checkbox')
       .name(id)
       .id(id)
-      .attr('checked', props.modelValue)
+      .checked(props.modelValue)
       .on('input', (e) => {
         props.modelValue.value = (e.target as HTMLInputElement).checked
       }),

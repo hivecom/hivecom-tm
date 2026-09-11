@@ -1,7 +1,5 @@
-import type { Component } from '@dolanske/cascade'
-import type { MaybeRef } from '@vue/reactivity'
-import { button, div, reusable } from '@dolanske/cascade'
-import { isRef, ref, watch } from '@vue/reactivity'
+import type { Component, MaybeRef } from '@dolanske/pantry'
+import { button, div, isRef, ref, reusable, watch } from '@dolanske/pantry'
 
 interface Props {
   button: Component<any>
