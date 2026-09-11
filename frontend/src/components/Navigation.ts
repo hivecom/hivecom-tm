@@ -1,7 +1,5 @@
-import { button, div, fragment, img, nav } from '@dolanske/cascade'
-import { onNavigation, onRouteResolve } from '@dolanske/crumbs'
-import { Link } from '@dolanske/pantry'
-import { computed, effect, ref } from '@vue/reactivity'
+import { button, computed, div, effect, fragment, img, Link, nav, onNavigation, onRouteResolve, ref } from '@dolanske/pantry'
+
 import { throttle } from '../util/timing'
 import { Icon } from './Icon'
 import LoadingBar from './LoadingBar'
@@ -16,7 +14,6 @@ function isDefaultDark() {
 }
 
 export default function () {
-  const activeButton = ref('records')
   const buttons = ['records', 'stats', 'players']
   const loading = ref(true)
 
@@ -24,8 +21,7 @@ export default function () {
     loading.value = true
   })
 
-  onRouteResolve((route) => {
-    activeButton.value = route.path.replaceAll('/', '')
+  onRouteResolve(() => {
     loading.value = false
   })
 
@@ -58,10 +54,7 @@ export default function () {
       div()
         .class('nav-links')
         .style('grid-template-columns', `repeat(${buttons.length}, 1fr)`)
-        .for(buttons, (link) => {
-          const isActive = computed(() => link === activeButton.value)
-          return Link(`/${link}`, link).class('active', isActive)
-        }),
+        .for(buttons, link => Link(`/${link}`, link, { activeClass: 'active' })),
       button()
         .setup((ctx) => {
           // Scrolling check

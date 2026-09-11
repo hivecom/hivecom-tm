@@ -1,6 +1,5 @@
-import type { Ref } from '@vue/reactivity'
-import { div, reusable } from '@dolanske/cascade'
-import { effect, ref } from '@vue/reactivity'
+import type { Ref } from '@dolanske/pantry'
+import { div, effect, ref, reusable } from '@dolanske/pantry'
 
 interface Props {
   active: Ref<boolean>

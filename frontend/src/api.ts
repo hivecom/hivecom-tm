@@ -1,6 +1,6 @@
 import type { TrackmaniaMap, TrackmaniaPlayer, TrackmaniaRecord } from './types'
 import { eru } from '@dolanske/eru'
-import { ref, shallowRef } from '@vue/reactivity'
+import { ref, shallowRef } from '@dolanske/pantry'
 
 const api = eru('https://records.hivecom.net/api')
 

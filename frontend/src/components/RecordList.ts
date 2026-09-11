@@ -1,5 +1,5 @@
 import type { TrackmaniaRecord } from '../types'
-import { li, reusable, span, strong } from '@dolanske/cascade'
+import { li, reusable, span, strong } from '@dolanske/pantry'
 import { timeAgo } from '../util/time'
 import Player from './Player'
 

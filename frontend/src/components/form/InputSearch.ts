@@ -1,6 +1,6 @@
-import type { MaybeRef, Ref } from '@vue/reactivity'
-import { button, input, reusable, span } from '@dolanske/cascade'
-import { computed } from '@vue/reactivity'
+import type { MaybeRef, Ref } from '@dolanske/pantry'
+import { button, computed, input, reusable, span } from '@dolanske/pantry'
+
 import { Icon } from '../Icon'
 
 interface Props {

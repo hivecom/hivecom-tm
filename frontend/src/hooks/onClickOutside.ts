@@ -1,4 +1,4 @@
-import type { Component } from '@dolanske/cascade'
+import type { Component } from '@dolanske/pantry'
 
 export function onClickOutside(ctx: Component<any>, onClose: () => void) {
   function handler(e: MouseEvent) {

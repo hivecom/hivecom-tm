@@ -1,7 +1,7 @@
-import type { RouteProps, TrackmaniaMap, TrackmaniaPlayer } from '../types'
-import { div, span, ul } from '@dolanske/cascade'
-import { getRoute } from '@dolanske/crumbs'
-import { computed, ref, watch } from '@vue/reactivity'
+import type { RouteProps } from '@dolanske/pantry'
+import type { TrackmaniaMap, TrackmaniaPlayer } from '../types'
+import { computed, div, getRoute, ref, span, ul, watch } from '@dolanske/pantry'
+
 import { FETCH_INTERVAL, getRecords } from '../api'
 import InputCheckbox from '../components/form/InputCheckbox'
 import InputSearch from '../components/form/InputSearch'
@@ -137,7 +137,7 @@ export default div<RouteProps<[number[], TrackmaniaMap[], TrackmaniaPlayer[]]>>(
           map,
           showFormattedNames,
           isNewRecord: computed(() => $records.value.includes(map.id)),
-        })
+        }).key(map.id)
       }),
       div(span('Looks like there are no maps here :/'))
         .if(computed(() => toRender.value.length === 0))

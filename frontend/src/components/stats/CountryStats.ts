@@ -1,7 +1,7 @@
 import type { Country } from '../../countries'
 import type { TrackmaniaPlayer } from '../../types'
-import { canvas, div, li, p, span, strong, ul } from '@dolanske/cascade'
-import { computed, ref, watch } from '@vue/reactivity'
+import { canvas, computed, div, li, p, ref, span, strong, ul, watch } from '@dolanske/pantry'
+
 import Chart from 'chart.js/auto'
 import { getCountry } from '../../countries'
 import { partialPercentage, PieOptions } from '../../util/common'
@@ -74,6 +74,10 @@ export default function ProcessPlayers(data: TrackmaniaPlayer[]) {
                 },
               },
             )
+            return () => {
+              chart?.destroy()
+              chart = undefined
+            }
           })
 
           // Update chart when datasets change
@@ -106,7 +110,7 @@ export default function ProcessPlayers(data: TrackmaniaPlayer[]) {
       ),
     ),
     ul().class('player-stats').for(countriesSorted, (country) => {
-      return li().nest(
+      return li().key(country.country.code).nest(
         div().class('title').nest(
           span().html(getFlagHTML(country.country.code, 32)),
           span(country.country.name),
@@ -124,7 +128,7 @@ export default function ProcessPlayers(data: TrackmaniaPlayer[]) {
       )
     }),
     InputSelect().style('width', '116px').props({
-      placeholder: 'Sorting on',
+      label: 'Sorting on',
       options: sortingOptions,
       modelValue: sortingOn,
       single: true,

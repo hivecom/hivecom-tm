@@ -1,4 +1,4 @@
-import { reusable } from '@dolanske/cascade'
+import { reusable } from '@dolanske/pantry'
 import { getFlagHTML } from './Icon'
 
 interface Props {

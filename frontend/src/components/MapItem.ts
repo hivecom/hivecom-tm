@@ -1,8 +1,7 @@
-import type { Ref } from '@vue/reactivity'
+import type { Ref } from '@dolanske/pantry'
 import type { TrackmaniaMap } from '../types'
-import { div, fragment, reusable, span, strong, table, td, th, tr } from '@dolanske/cascade'
-import { getRoute } from '@dolanske/crumbs'
-import { computed, ref } from '@vue/reactivity'
+import { computed, div, fragment, getRoute, ref, reusable, span, strong, table, td, th, tr } from '@dolanske/pantry'
+
 import { timeAgo } from '../util/time'
 import Detail from './Detail'
 import RecordList from './RecordList'

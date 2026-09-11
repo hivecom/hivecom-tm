@@ -29,9 +29,3 @@ export interface TrackmaniaPlayer {
     unix_date: number
   }
 }
-
-export interface RouteProps<T> {
-  [key: string]: unknown
-  $data: T
-  $params: Record<string, string>
-}

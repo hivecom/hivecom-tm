@@ -1,6 +1,6 @@
-import type { MaybeRef, Ref } from '@vue/reactivity'
-import { button, div, reusable, span } from '@dolanske/cascade'
-import { computed, ref, unref } from '@vue/reactivity'
+import type { MaybeRef, Ref } from '@dolanske/pantry'
+import { button, computed, div, ref, reusable, span, unref } from '@dolanske/pantry'
+
 import { onClickOutside } from '../../hooks/onClickOutside'
 import { Icon } from '../Icon'
 
@@ -8,8 +8,8 @@ import { Icon } from '../Icon'
 // showSelected=true when single=false (not used in the app, not needed)
 
 interface Props {
-  modelValue: Ref<string[]>
-  options: MaybeRef<string[]>
+  modelValue: Ref<string[]> | Ref<string>
+  options: MaybeRef<readonly string[]>
   label: MaybeRef<string>
   single?: boolean
   showSelected?: boolean
@@ -26,7 +26,7 @@ export default reusable<Props>('div', (ctx, props) => {
   // Options
   const labelToShow = computed(() => {
     const _options = unref(props.options)
-    const _values = unref(props.modelValue)
+    const _values = props.modelValue.value
 
     if (props.showSelected) {
       if (props.single) {
@@ -63,16 +63,16 @@ export default reusable<Props>('div', (ctx, props) => {
         .class('button')
         .class('active', isActive)
         .click(() => {
-          if (props.single) {
-            // @ts-expect-error We are working in a single context
-            props.modelValue.value = option
+          const model = props.modelValue
+          if (props.single || !Array.isArray(model.value)) {
+            model.value = option
             open.value = false
           }
+          else if (model.value.includes(option)) {
+            model.value = model.value.filter(a => a !== option)
+          }
           else {
-            if (props.modelValue.value.includes(option))
-              props.modelValue.value = props.modelValue.value.filter(a => a !== option)
-            else
-              props.modelValue.value.push(option)
+            model.value.push(option)
           }
         })
     }),
