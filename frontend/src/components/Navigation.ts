@@ -1,4 +1,4 @@
-import { button, computed, div, effect, fragment, img, Link, nav, onNavigation, onRouteResolve, ref } from '@dolanske/pantry'
+import { button, computed, div, effect, fragment, img, Link, nav, onRouteResolve, ref } from '@dolanske/pantry'
 
 import { throttle } from '../util/timing'
 import { Icon } from './Icon'
@@ -15,11 +15,9 @@ function isDefaultDark() {
 
 export default function () {
   const buttons = ['records', 'stats', 'players']
-  const loading = ref(true)
 
-  onNavigation(() => {
-    loading.value = true
-  })
+  // Loading only runs once on first load
+  const loading = ref(true)
 
   onRouteResolve(() => {
     loading.value = false
@@ -28,7 +26,7 @@ export default function () {
   return fragment().nest(
     LoadingBar().prop('active', loading),
     nav().class('navigation').nest(
-      div().class('logo-wrap').nest(
+      Link('/').class('logo-wrap').nest(
         img('/logo.svg').alt('Hivecom Records Logo'),
       ),
       div().class('flex-1'),

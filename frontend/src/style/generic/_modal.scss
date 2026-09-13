@@ -1,0 +1,29 @@
+.modal-backdrop {
+  z-index: 10000;
+  position: fixed;
+  display: block;
+  height: 100%;
+  inset: 0;
+  padding: 64px;
+  overflow: hidden auto;
+  view-transition-name: none;
+  background-color: rgba(9, 9, 9, 0.85);
+}
+
+html:has(.modal-backdrop) {
+  overflow: hidden;
+}
+
+.modal-content {
+  width: 100%;
+  max-width: var(--container-size-s);
+  padding: 0 2em;
+  margin-inline: auto;
+  min-height: 100%;
+  position: relative;
+  view-transition-name: none;
+  display: flex;
+  align-items: flex-start;
+  height: auto;
+  z-index: 10001;
+}

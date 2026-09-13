@@ -17,7 +17,7 @@ type CountryStats = Record<string, {
 export default function ProcessPlayers(data: TrackmaniaPlayer[]) {
   // Sorting and rendering
   const sortingOptions = ['Players', 'Records'] as const
-  const sortingOn = ref<'Players' | 'Records'>(sortingOptions[0])
+  const sortingOn = ref<'Players' | 'Records'>(sortingOptions[1])
   //
 
   const countriesRaw = data.reduce<CountryStats>((group, item) => {

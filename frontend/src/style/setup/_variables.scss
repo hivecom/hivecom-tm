@@ -10,6 +10,7 @@
   --color-bg-light-active: #c0c6f6;
 
   --color-border: #606380;
+  --color-border-weak: #a0a4c988;
 
   --color-text: #27223d;
   --color-text-static: #27223d;
@@ -20,6 +21,9 @@
   --color-accent: #5665ea;
   --color-highlight: #eec978;
   --color-highlight-hover: #ddb55e;
+
+  --color-bg-highlight: #eec97862;
+  --color-bg-highlight-hover: #ddb55e80;
 }
 
 :root.dark-theme {
@@ -34,6 +38,7 @@
   --color-black: #e0e0e0;
 
   --color-border: #282931;
+  --color-border-weak: #191a1f;
 
   --color-text: #dedbe7;
   --color-text-light: #b1adc4;
@@ -41,4 +46,7 @@
   --color-text-white: #fff;
 
   --color-accent: #949df5;
+
+  --color-bg-highlight: #f0bc4b15;
+  --color-bg-highlight-hover: #f0bc4b28;
 }

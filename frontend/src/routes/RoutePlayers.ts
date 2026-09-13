@@ -53,7 +53,11 @@ export default div<RouteProps<TrackmaniaPlayer[]>>().setup((ctx, props) => {
                 )
               : td(),
             td(maps),
-            td(records),
+            latest
+              ? td().nest(Link('/records', records, { query: {
+                  player: name,
+                } }))
+              : td(records),
           ])
         }),
       ),

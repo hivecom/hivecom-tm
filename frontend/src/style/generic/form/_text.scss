@@ -19,7 +19,8 @@ input[type='text'] {
 
 .form-search {
   position: relative;
-  min-width: 208px;
+  // min-width: 208px;
+  @include t();
 
   &.has-input {
     background-color: var(--color-bg-light-hover);
@@ -44,4 +45,5 @@ input[type='text'] {
   @include font(400);
   color: var(--color-text);
   opacity: 1;
+  text-overflow: ellipsis;
 }

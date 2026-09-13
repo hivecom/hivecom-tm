@@ -38,11 +38,41 @@
     width: 192px;
     max-height: 512px;
 
+    .form-search {
+      min-width: unset;
+      border-radius: 0 !important;
+      border-top: none !important;
+      border-left: none !important;
+      border-right: none !important;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background-color: var(--color-bg);
+
+      .form-search-icon {
+        display: none;
+      }
+
+      input {
+        width: 100%;
+        padding-left: 16px;
+        // border-radius: ;
+      }
+    }
+
     .button {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       position: relative;
       width: 100%;
       height: var(--form-item-height);
-      padding-right: 24px;
+      padding-right: 8px;
+
+      span {
+        display: flex;
+        align-items: center;
+      }
 
       &:before {
         @include t();

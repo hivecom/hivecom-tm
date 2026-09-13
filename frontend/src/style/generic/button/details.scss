@@ -3,7 +3,7 @@
   width: 100%;
 
   .details-content {
-    @include t(0.15s);
+    @include t(0.1s);
     max-height: 0;
     overflow: hidden;
   }

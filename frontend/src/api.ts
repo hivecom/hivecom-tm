@@ -8,7 +8,7 @@ export const maps = api.route('/maps')
 export const players = api.route('/players')
 
 export async function getRecords() {
-  const DAYS = 3
+  const DAYS = 7
   const since = Math.floor(Date.now() / 1000) - (86400 * DAYS)
   const r = await api
     .route(`/records?since=${since}`)
@@ -30,7 +30,12 @@ export async function getMaps() {
     return cachedMaps.value
   }
 
-  const data = await maps.get<TrackmaniaMap[]>()
+  const data = (await maps.get<TrackmaniaMap[]>())
+    .map((map) => {
+      map.records = map.records.toSorted((a, b) => a.time > b.time ? 1 : -1)
+      return map
+    })
+
   cachedMaps.value = data
   lastMapFetch.value = Date.now()
   return data

@@ -2,6 +2,11 @@
 Utility layout classes
 */
 
+:root {
+  --container-size: 928px;
+  --container-size-s: 628px;
+}
+
 .flex {
   @include flex(15px);
 
@@ -27,8 +32,16 @@ Utility layout classes
 }
 
 .container {
-  max-width: 888px;
+  max-width: var(--container-size);
   width: 100%;
   margin: 0 auto;
   padding: 0 2em;
+}
+
+.card {
+  padding: 16px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg);
+  border-radius: 16px;
+  width: 100%;
 }
