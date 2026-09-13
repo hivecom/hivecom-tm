@@ -88,6 +88,7 @@ export default reusable<Props>('div', (ctx, props) => {
           .props({
             options: itemCountOptions,
             modelValue: itemCount,
+            showSearch: false,
             single: true,
           })
           .attr('data-title-top', 'Maps per section'),

@@ -1,4 +1,4 @@
-import { createApp } from '@dolanske/pantry'
+import { createApp, onNavigation } from '@dolanske/pantry'
 import { getMaps, getPlayers, getRecords } from './api'
 import Navigation from './components/Navigation'
 import RouteList from './routes/RouteList'
@@ -17,6 +17,9 @@ export const app = createApp({
         getPlayers(),
       ])
     },
+    meta: {
+      title: 'Records',
+    },
   },
   '/stats': {
     component: RouteStats,
@@ -26,11 +29,21 @@ export const app = createApp({
         getPlayers(),
       ])
     },
+    meta: {
+      title: 'Stats',
+    },
   },
   '/players': {
     component: RoutePlayers,
     loader: () => getPlayers(),
+    meta: {
+      title: 'Players',
+    },
   },
+})
+
+onNavigation((route) => {
+  document.title = `${route.meta?.title} :: Hivecom Records`
 })
 
 app.run('#router')

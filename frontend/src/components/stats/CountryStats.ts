@@ -133,6 +133,7 @@ export default function ProcessPlayers(data: TrackmaniaPlayer[]) {
       modelValue: sortingOn,
       single: true,
       showSelected: true,
+      showSearch: false,
     }).attr('data-title-left', 'Sort by'),
   )
 }

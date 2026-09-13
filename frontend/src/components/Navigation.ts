@@ -26,7 +26,7 @@ export default function () {
   return fragment().nest(
     LoadingBar().prop('active', loading),
     nav().class('navigation').nest(
-      Link('/').class('logo-wrap').nest(
+      Link('/records').class('logo-wrap').nest(
         img('/logo.svg').alt('Hivecom Records Logo'),
       ),
       div().class('flex-1'),
