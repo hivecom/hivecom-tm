@@ -10,7 +10,7 @@ const _GRAMMAR: &str = include_str!("map_name.pest");
 #[grammar = "map_name.pest"]
 pub struct MapNameParser;
 
-pub fn map_name(input: &str) -> Result<Vec<Fragment>, Error<Rule>> {
+pub fn map_name(input: &str) -> Result<Vec<Fragment<'_>>, Error<Rule>> {
     let parsed = MapNameParser::parse(Rule::name, input)?
         .next()
         .expect("Pest grammar should always have a top level name");
@@ -96,35 +96,21 @@ impl Tag {
         Self::Color(r | r << 4, g | g << 4, b | b << 4)
     }
 
-pub fn to_html_tag(&self) -> Cow<'static, str> {
-    use Tag::*;
+    pub fn as_html_tag(&self) -> Cow<'static, str> {
+        use Tag::*;
 
-    match self {
-        Bold => {
-            Cow::Borrowed("<span class=\"bold\">")
+        match self {
+            Bold => Cow::Borrowed("<span class=\"bold\">"),
+            Italic => Cow::Borrowed("<span class=\"italic\">"),
+            Shadowed => Cow::Borrowed("<span class=\"shadow\">"),
+            Wide => Cow::Borrowed("<span class=\"wide\">"),
+            Narrow => Cow::Borrowed("<span class=\"narrow\">"),
+            Color(r, g, b) => {
+                Cow::Owned(format!("<span style=\"color: rgb({}, {}, {});\">", r, g, b))
+            }
+            Normal | DefaultColor | ResetAll | Capitals => Cow::Borrowed(""),
         }
-        Italic => {
-            Cow::Borrowed("<span class=\"italic\">")
-        }
-        Shadowed => {
-            Cow::Borrowed("<span class=\"shadow\">")
-        }
-        Wide => {
-            Cow::Borrowed("<span class=\"wide\">")
-        }
-        Narrow => {
-            Cow::Borrowed("<span class=\"narrow\">")
-        }
-        Color(r, g, b) => {
-            Cow::Owned(format!("<span style=\"color: rgb({}, {}, {});\">", r, g, b))
-        }
-        Normal |
-            DefaultColor |
-            ResetAll |
-            Capitals => Cow::Borrowed(""),
     }
-}
-
 }
 
 #[cfg(test)]
