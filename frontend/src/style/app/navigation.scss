@@ -51,4 +51,42 @@
       background-color: var(--color-bg-light-hover);
     }
   }
+
+  .nav-latest {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-left: 16px;
+    position: relative;
+    margin-left: 16px;
+
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      border-left: 1px solid var(--color-border-weak);
+    }
+
+    & > span {
+      color: var(--color-accent);
+      font-size: 1.6rem;
+    }
+
+    p {
+      display: flex;
+      gap: 2px;
+      font-size: 1.4rem;
+      color: var(--color-text-lighter);
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+
+      strong {
+        font-size: inherit;
+      }
+    }
+  }
 }

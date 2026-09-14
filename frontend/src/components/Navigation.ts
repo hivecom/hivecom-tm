@@ -1,5 +1,7 @@
-import { button, computed, div, effect, fragment, img, Link, nav, onRouteResolve, ref } from '@dolanske/pantry'
-
+import type { TrackmaniaRecord } from '../types'
+import { button, computed, div, effect, fragment, img, Link, nav, onRouteResolve, p, ref, shallowRef, span, strong } from '@dolanske/pantry'
+import { getMaps, getRecords, RECORDS_FETCH_TIMEOUT } from '../api'
+import { timeAgo } from '../util/time'
 import { throttle } from '../util/timing'
 import { Icon } from './Icon'
 import LoadingBar from './LoadingBar'
@@ -19,7 +21,7 @@ export default function () {
   // Loading only runs once on first load
   const loading = ref(true)
 
-  onRouteResolve(() => {
+  onRouteResolve(async () => {
     loading.value = false
   })
 
@@ -29,6 +31,33 @@ export default function () {
       Link('/records').class('logo-wrap').nest(
         img('/logo.svg').alt('Hivecom Records Logo'),
       ),
+      // Latest record fetching & display
+      div().setup((ctx) => {
+        const record = shallowRef<TrackmaniaRecord>()
+        const mapName = ref()
+
+        async function check() {
+          const item = await getRecords().then(data => record.value = data[0])
+          mapName.value = (await getMaps()).find(m => m.id === item.mapId)?.name
+        }
+
+        check()
+        setInterval(check, RECORDS_FETCH_TIMEOUT)
+
+        ctx.class('nav-latest')
+        ctx.show(() => !!mapName.value)
+        ctx.nest(
+          span('Newest record!'),
+          p(
+            strong(() => record.value?.player),
+            'drove',
+            strong(() => record.value?.time),
+            'on',
+            strong(() => mapName.value),
+          ),
+          p(() => timeAgo(Number(`${record.value?.unixDate}000`))),
+        )
+      }),
       div().class('flex-1'),
       button().setup((ctx) => {
         const isDark = ref(isDefaultDark())

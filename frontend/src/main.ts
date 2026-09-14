@@ -12,7 +12,7 @@ export const app = createApp({
     component: RouteList,
     loader: () => {
       return Promise.all([
-        getRecords(),
+        getRecords().then(data => data.map(r => r.mapId)),
         getMaps(),
         getPlayers(),
       ])

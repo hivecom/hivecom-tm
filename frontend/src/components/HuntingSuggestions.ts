@@ -1,3 +1,4 @@
+import type { Ref } from '@dolanske/pantry'
 import type { TrackmaniaMap, TrackmaniaPlayer } from '../types'
 import { div, fragment, hr, p, ref, reusable, shallowRef, span, ul, watch } from '@dolanske/pantry'
 import { convertTimeToMs } from '../util/format'
@@ -8,7 +9,7 @@ import MapItem from './MapItem'
 
 interface Props {
   records: number[]
-  maps: TrackmaniaMap[]
+  maps: Ref<TrackmaniaMap[]>
   players: TrackmaniaPlayer[]
 }
 
@@ -35,7 +36,7 @@ export default reusable<Props>('div', (ctx, props) => {
     const count = Number(itemCount.value)
 
     // Only return maps where the current player is and has more than 1 record and the player is not the WR holder
-    const scope = props.maps
+    const scope = props.maps.value
       .filter(map =>
         map.records.length > 1
         && map.records[0].player

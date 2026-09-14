@@ -4,4 +4,15 @@
     left: unset;
     top: unset;
   }
+
+  .navigation .nav-latest {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  .navigation .nav-links a {
+    width: 96px;
+    font-size: 1.6rem;
+  }
 }

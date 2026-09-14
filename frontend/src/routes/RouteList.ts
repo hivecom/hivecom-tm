@@ -1,7 +1,7 @@
 import type { RouteProps } from '@dolanske/pantry'
 import type { TrackmaniaMap, TrackmaniaPlayer } from '../types'
-import { button, computed, div, getRoute, nextTick, ref, span, ul, watch } from '@dolanske/pantry'
-import { FETCH_INTERVAL, getRecords } from '../api'
+import { button, computed, div, getRoute, nextTick, ref, shallowRef, span, ul, watch } from '@dolanske/pantry'
+import { getMaps, getRecords, RECORDS_FETCH_TIMEOUT } from '../api'
 import InputCheckbox from '../components/form/InputCheckbox'
 import InputSearch from '../components/form/InputSearch'
 import InputSelect from '../components/form/InputSelect'
@@ -23,14 +23,14 @@ function extractKey(data: TrackmaniaMap[], key: keyof TrackmaniaMap) {
 }
 
 export default div<RouteProps<[number[], TrackmaniaMap[], TrackmaniaPlayer[]]>>().setup((ctx, props) => {
-  const $records = ref(props.$data[0])
-  const $maps = props.$data[1]
+  const $records = shallowRef(props.$data[0])
+  const $maps = shallowRef(props.$data[1])
   const $players = props.$data[2]
   const search = ref('')
 
   // Environments
   const envFilters = ref<string[]>([])
-  const envOptions = extractKey($maps, 'environment')
+  const envOptions = computed(() => extractKey($maps.value, 'environment'))
 
   // Players
   const plaFilter = ref<string>('')
@@ -43,7 +43,7 @@ export default div<RouteProps<[number[], TrackmaniaMap[], TrackmaniaPlayer[]]>>(
 
   // Authors
   const autFilters = ref<string[]>([])
-  const autOptions = extractKey($maps, 'author')
+  const autOptions = computed(() => extractKey($maps.value, 'author'))
 
   // Sorting
   const sortOptions = ['Name', 'Activity', 'Most played', 'Least played']
@@ -53,7 +53,7 @@ export default div<RouteProps<[number[], TrackmaniaMap[], TrackmaniaPlayer[]]>>(
   const showFormattedNames = ref(true)
 
   // Apply filters
-  const toRender = computed(() => $maps
+  const toRender = computed(() => $maps.value
     // Make sure every selected player is in the map's saved records
     .filter(item => (
       plaFilter.value.length > 0
@@ -94,19 +94,13 @@ export default div<RouteProps<[number[], TrackmaniaMap[], TrackmaniaPlayer[]]>>(
     return 'Looks like there are no maps here'
   })
 
-  // Is set to true, if new records have been added since user loaded this page
-  const hasNewRecords = ref(false)
-  // Fetch new records
+  // Fetch new records every couple minutes
   const interval = setInterval(async () => {
-    $records.value = await getRecords()
-  }, FETCH_INTERVAL)
-  ctx.onDestroy(() => clearInterval(interval))
+    getRecords().then(data => $records.value = data.map(r => r.mapId))
+    getMaps().then(data => $maps.value = data)
+  }, RECORDS_FETCH_TIMEOUT)
 
-  watch($records, (newVal, oldVal) => {
-    if (!hasNewRecords.value && oldVal.length < newVal.length) {
-      hasNewRecords.value = true
-    }
-  })
+  ctx.onDestroy(() => clearInterval(interval))
 
   let pauseUrlSync = false
   const activeMapId = ref(-1)
@@ -217,22 +211,22 @@ export default div<RouteProps<[number[], TrackmaniaMap[], TrackmaniaPlayer[]]>>(
         options: plaOptions,
         modelValue: plaFilter,
         single: true,
-      }).attr('data-title-top', 'Show specific player\'s records'),
+      }).attr('data-title-left', 'Show specific player\'s records'),
       InputSelect().props({
         label: 'Sort',
         options: sortOptions,
         modelValue: sort,
         showSearch: false,
         single: true,
-      }).attr('data-title-top', 'Sort maps'),
+      }).attr('data-title-left', 'Sort maps'),
       InputCheckbox().props({
         modelValue: showFormattedNames,
         icon: Icon.palette,
-      }).attr('data-title-top', 'Show formatted map names'),
+      }).attr('data-title-left', 'Show formatted map names'),
       button()
         .html(Icon.timer)
         .class('button form-item round-btn')
-        .attr('data-title-top', 'Map hunting suggestions')
+        .attr('data-title-left', 'Map hunting suggestions')
         .click(() => modalOpen.value = true),
       button()
         .html(Icon.close)
@@ -244,7 +238,7 @@ export default div<RouteProps<[number[], TrackmaniaMap[], TrackmaniaPlayer[]]>>(
           envFilters.value = []
           sort.value = ''
         })
-        .attr('data-title-top', 'Clear filters'),
+        .attr('data-title-left', 'Clear filters'),
     ),
     div().class('map-list').nest(
       ul().for(toRender, (map) => {

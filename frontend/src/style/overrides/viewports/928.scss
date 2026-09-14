@@ -4,10 +4,17 @@
 
     .logo-wrap {
       max-width: 128px;
+      min-width: 128px;
 
       img {
         width: 100%;
       }
+    }
+
+    .nav-links a {
+      width: auto;
+      padding-inline: 16px;
+      font-size: 1.4rem;
     }
   }
 
