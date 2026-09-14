@@ -166,7 +166,7 @@
 
     .map-details,
     .map-players {
-      padding: 24px 16px;
+      padding: 24px;
     }
 
     .map-details {
@@ -187,12 +187,13 @@
           @include font(400);
           font-size: 1.4rem;
           padding-bottom: 16px;
-          vertical-align: middle;
+          vertical-align: top;
           text-align: left;
         }
 
         th {
           color: var(--color-text-lighter);
+          width: fit-content;
         }
 
         td {
@@ -202,6 +203,7 @@
     }
 
     .map-players {
+      padding-right: 16px;
       ul {
         li {
           @include flex(8px);

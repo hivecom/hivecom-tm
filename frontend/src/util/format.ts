@@ -1,14 +1,47 @@
-export function pad(number: number) {
-  return number < 10 ? `0${number}` : `${number}`
-}
+const timestampCache = new Map<string, number>()
 
 // Convert timestampts in MM:SS.SSS to milliseconds
-export function convertTimeToMs(timestamp: string) {
-  const [minutes, rest] = timestamp.split(':')
-  const [seconds, milliseconds] = rest.split('.')
+export function convertTimeToMs(timestamp: string): number {
+  if (timestampCache.has(timestamp)) {
+    return timestampCache.get(timestamp)!
+  }
 
-  let time = Number(milliseconds)
-  time += Number(seconds) * 1000
-  time += Number(minutes) * 60 * 1000
-  return time
+  const match = timestamp.match(/^(\d+):(\d{2})\.(\d{1,3})$/)
+  if (!match) {
+    throw new Error(`Invalid timestamp format: "${timestamp}"`)
+  }
+  const [, minutes, seconds, msRaw] = match
+  const milliseconds = Number(msRaw.padEnd(2, '0'))
+
+  const result = (
+    Number(minutes) * 60_000
+    + Number(seconds) * 1000
+    + milliseconds
+  )
+
+  timestampCache.set(timestamp, result)
+
+  return result
+}
+
+const msCache = new Map<number, string>()
+
+export function convertMsToTime(ms: number): string {
+  if (msCache.has(ms)) {
+    return msCache.get(ms)!
+  }
+
+  const minutes = Math.floor(ms / 60000)
+  const seconds = Math.floor((ms % 60000) / 1000)
+  const milliseconds = Math.floor(ms % 1000)
+
+  const mm = String(minutes).padStart(2, '0')
+  const ss = String(seconds).padStart(2, '0')
+  const mss = String(milliseconds).padStart(2, '0')
+
+  const formatted = `${mm}:${ss}.${mss}`
+
+  msCache.set(ms, formatted)
+
+  return formatted
 }

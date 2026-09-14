@@ -19,3 +19,12 @@ export function timeAgo(input: number | Date | string) {
     }
   }
 }
+
+export function formatDate(date: number) {
+  const formatter = new Intl.DateTimeFormat(undefined, {
+    timeStyle: 'medium',
+    dateStyle: 'medium',
+  })
+
+  return formatter.format(date)
+}

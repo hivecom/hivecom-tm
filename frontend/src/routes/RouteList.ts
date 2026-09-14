@@ -9,6 +9,7 @@ import HuntingSuggestions from '../components/HuntingSuggestions'
 import { Icon } from '../components/Icon'
 import MapItem from '../components/MapItem'
 import Modal from '../components/Modal'
+import { sortRecordsByLatest } from '../util/common'
 import { searchInStr } from '../util/search-in'
 
 function extractKey(data: TrackmaniaMap[], key: keyof TrackmaniaMap) {
@@ -45,7 +46,7 @@ export default div<RouteProps<[number[], TrackmaniaMap[], TrackmaniaPlayer[]]>>(
   const autOptions = extractKey($maps, 'author')
 
   // Sorting
-  const sortOptions = ['Name', 'Most played', 'Least played']
+  const sortOptions = ['Name', 'Activity', 'Most played', 'Least played']
   const sort = ref('')
 
   // Checkboxes
@@ -73,6 +74,11 @@ export default div<RouteProps<[number[], TrackmaniaMap[], TrackmaniaPlayer[]]>>(
           .trim()
           .toLowerCase()
           .localeCompare(b.name.replace(/[^a-z0-9 ]/gi, '').trim().toLowerCase())
+        case 'Activity': {
+          const aLatest = sortRecordsByLatest(a.records)[0]
+          const bLatest = sortRecordsByLatest(b.records)[0]
+          return aLatest.unixDate > bLatest.unixDate ? -1 : 1
+        }
         case 'Most played': return b.records.length - a.records.length
         case 'Least played': return a.records.length - b.records.length
         default: return Number($records.value.includes(b.id)) - Number($records.value.includes(a.id))
@@ -173,7 +179,7 @@ export default div<RouteProps<[number[], TrackmaniaMap[], TrackmaniaPlayer[]]>>(
     history.replaceState(history.state, '', url)
   }, { deep: true })
 
-  const activeFilters = computed(() => plaFilter.value || autFilters.value.length || envFilters.value.length)
+  const activeFilters = computed(() => plaFilter.value || autFilters.value.length || envFilters.value.length || sort.value)
 
   // Modal setup
   const modalOpen = ref(false)
@@ -236,6 +242,7 @@ export default div<RouteProps<[number[], TrackmaniaMap[], TrackmaniaPlayer[]]>>(
           plaFilter.value = ''
           autFilters.value = []
           envFilters.value = []
+          sort.value = ''
         })
         .attr('data-title-top', 'Clear filters'),
     ),
