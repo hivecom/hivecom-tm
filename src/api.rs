@@ -219,6 +219,7 @@ pub struct Player {
 pub struct LatestRecord {
     pub id: u64,
     pub map_name: String,
+    pub map_name_styled: String,
     #[serde(serialize_with = "serialize_duration")]
     pub time: DisplayDuration,
     #[serde(serialize_with = "serialize_date")]
@@ -303,6 +304,7 @@ pub async fn players_get(
                     *latest = LatestRecord {
                         id: map_id,
                         map_name: sanitize_map_name(&map_name),
+                        map_name_styled: styling_to_html(&map_name),
                         time: DisplayDuration(Duration::milliseconds(time)),
                         date,
                         unix_date: date.unix_timestamp(),
@@ -312,6 +314,7 @@ pub async fn players_get(
                 player.latest = Some(LatestRecord {
                     id: map_id,
                     map_name: sanitize_map_name(&map_name),
+                    map_name_styled: styling_to_html(&map_name),
                     time: DisplayDuration(Duration::milliseconds(time)),
                     date,
                     unix_date: date.unix_timestamp(),
