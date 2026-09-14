@@ -93,7 +93,7 @@ pub async fn root(
     for (id, name, author, _environment, player, country, time, date) in loaded_scores {
         let map = Map {
             id,
-            name: crate::util::map_name_html(&name),
+            name: crate::util::styling_to_html(&name),
             author,
             //environment,
         };

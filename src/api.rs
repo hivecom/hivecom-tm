@@ -13,7 +13,7 @@ use time::{format_description, Duration, OffsetDateTime, PrimitiveDateTime};
 use std::collections::HashMap;
 
 use crate::site::{map_country, DisplayDuration};
-use crate::util::sanitize_map_name;
+use crate::util::{sanitize_map_name, styling_to_html};
 
 #[derive(Deserialize, Debug)]
 pub struct Input {
@@ -25,6 +25,7 @@ pub struct Input {
 pub struct Record {
     pub map_id: u64,
     pub player: String,
+    pub player_styled: String,
     pub country: &'static str,
     #[serde(serialize_with = "serialize_duration")]
     pub time: DisplayDuration,
@@ -44,6 +45,7 @@ pub async fn records_get(
             "SELECT
                 records.ChallengeId,
                 players.Login,
+                players.NickName,
                 players.Nation,
                 records.Score,
                 records.Date
@@ -52,16 +54,17 @@ pub async fn records_get(
             (),
         )
         .await?
-        .collect::<(u64, String, String, i64, PrimitiveDateTime)>()
+        .collect::<(u64, String, String, String, i64, PrimitiveDateTime)>()
         .await?;
 
     let mut best_scores = HashMap::new();
-    for (map_id, player, country, time, date) in loaded_records {
+    for (map_id, player, nickname, country, time, date) in loaded_records {
         let date = date.assume_utc();
         let time = DisplayDuration(Duration::milliseconds(time));
         let record = best_scores.entry(map_id).or_insert_with(|| Record {
             map_id,
             player: player.clone(),
+            player_styled: styling_to_html(&nickname),
             country: map_country(&country),
             time,
             date,
@@ -72,6 +75,7 @@ pub async fn records_get(
             *record = Record {
                 map_id,
                 player,
+                player_styled: styling_to_html(&nickname),
                 country: map_country(&country),
                 time,
                 date,
@@ -121,6 +125,7 @@ pub async fn maps_get(
                 challenges.Author,
                 challenges.Environment,
                 players.Login,
+                players.NickName,
                 players.Nation,
                 records.Score,
                 records.Date
@@ -141,6 +146,8 @@ pub async fn maps_get(
             String,
             // Player
             String,
+            // Player NickName
+            String,
             // Country
             String,
             // Time
@@ -151,12 +158,13 @@ pub async fn maps_get(
         .await?;
 
     let mut maps: HashMap<u64, Map> = HashMap::new();
-    for (id, name, author, environment, player, country, time, date) in loaded_maps {
+    for (id, name, author, environment, player, nickname, country, time, date) in loaded_maps {
         let date = date.assume_utc();
         if let Some(map) = maps.get_mut(&id) {
             let record = Record {
                 map_id: id,
                 player,
+                player_styled: styling_to_html(&nickname),
                 country: map_country(&country),
                 time: DisplayDuration(Duration::milliseconds(time)),
                 date,
@@ -166,13 +174,14 @@ pub async fn maps_get(
         } else {
             let map = Map {
                 id,
-                name: crate::util::sanitize_map_name(&name),
-                name_styled: crate::util::map_name_html(&name),
+                name: sanitize_map_name(&name),
+                name_styled: styling_to_html(&name),
                 author,
                 environment,
                 records: vec![Record {
                     map_id: id,
                     player,
+                    player_styled: styling_to_html(&nickname),
                     country: map_country(&country),
                     time: DisplayDuration(Duration::milliseconds(time)),
                     date,
@@ -199,6 +208,7 @@ pub async fn maps_get(
 #[derive(Debug, Clone, Serialize)]
 pub struct Player {
     pub name: String,
+    pub name_styled: String,
     pub country: &'static str,
     pub maps: u64,
     pub records: u64,
@@ -229,6 +239,7 @@ pub async fn players_get(
                 CONVERT(CAST(challenges.Name as BINARY) USING utf8),
                 players.Nation,
                 players.Login,
+                players.NickName,
                 records.Score,
                 records.Date
             FROM challenges
@@ -248,6 +259,8 @@ pub async fn players_get(
             String,
             // Player Name
             String,
+            // Player Nickname
+            String,
             // Time
             i64,
             // Date
@@ -257,9 +270,10 @@ pub async fn players_get(
 
     let mut players = HashMap::new();
     let mut records = HashMap::new();
-    for (player_id, map_id, map_name, country, player, time, date) in loaded_players {
+    for (player_id, map_id, map_name, country, player, nickname, time, date) in loaded_players {
         let player = Player {
             name: player,
+            name_styled: styling_to_html(&nickname),
             country: map_country(&country),
             maps: 0,
             records: 0,

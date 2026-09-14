@@ -7,7 +7,7 @@ pub fn sanitize_map_name(name: &str) -> String {
     crate::parse::map_name_string(name).expect("Parser supports all valid map names")
 }
 
-pub fn map_name_html(name: &str) -> String {
+pub fn styling_to_html(name: &str) -> String {
     let reset_all = |name_html: &mut String, stack: &mut Vec<crate::parse::Tag>| {
         while let Some(frag) = stack.pop() {
             match frag {
@@ -85,7 +85,7 @@ mod tests {
     #[test]
     fn fruzzy() {
         let input = "$w$f0fF$f1fr$f2fu$f4fz$f6fz$f8fy";
-        let actual = map_name_html(input);
+        let actual = styling_to_html(input);
 
         assert_eq!(
             "<span class=\"wide\">\
@@ -103,7 +103,7 @@ mod tests {
     #[test]
     fn default_color() {
         let input = "$fff$ocolored$gbold";
-        let actual = map_name_html(input);
+        let actual = styling_to_html(input);
 
         assert_eq!(
             "<span style=\"color: rgb(255, 255, 255);\">\
