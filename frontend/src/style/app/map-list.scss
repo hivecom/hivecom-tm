@@ -189,7 +189,7 @@
           margin-bottom: 24px;
 
           &:nth-child(1) {
-            span:first-child {
+            & > span:first-child {
               opacity: 1;
             }
 
@@ -199,7 +199,7 @@
           }
 
           &:nth-child(2) {
-            span:first-child {
+            & > span:first-child {
               opacity: 0.8;
             }
 
@@ -209,12 +209,12 @@
           }
 
           &:nth-child(3) {
-            span:first-child {
+            & > span:first-child {
               opacity: 0.65;
             }
           }
 
-          span {
+          & > span {
             &:nth-child(1) {
               opacity: 0.5;
               width: 32px;
