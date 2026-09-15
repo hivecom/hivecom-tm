@@ -33,7 +33,7 @@ export default reusable<Props>('li', (ctx, props) => {
       .props({
         button: fragment([
           span().class('map-name styled-name').html(name),
-          strong().html(() => showStyledUsernames ? wr.playerStyled : wr.player).class('map-player'),
+          strong().html(() => showStyledUsernames.value ? wr.playerStyled : wr.player).class('map-player'),
           strong(wr.time).class('map-time'),
         ]),
         content: div().class('map-content').nest(

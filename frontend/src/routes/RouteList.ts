@@ -10,6 +10,7 @@ import MapItem from '../components/MapItem'
 import Modal from '../components/Modal'
 import { sortRecordsByLatest } from '../util/common'
 import { searchInStr } from '../util/search-in'
+import { throttle } from '../util/timing'
 
 function extractKey(data: TrackmaniaMap[], key: keyof TrackmaniaMap) {
   return data
@@ -25,7 +26,15 @@ export default div<RouteProps<[number[], TrackmaniaMap[], TrackmaniaPlayer[]]>>(
   const $records = shallowRef(props.$data[0])
   const $maps = shallowRef(props.$data[1])
   const $players = props.$data[2]
+
   const search = ref('')
+  const searchRaw = ref('')
+
+  const updated = throttle(() => {
+    search.value = searchRaw.value
+  }, 500)
+
+  watch(searchRaw, () => updated())
 
   // Environments
   const envFilters = ref<string[]>([])
@@ -190,7 +199,7 @@ export default div<RouteProps<[number[], TrackmaniaMap[], TrackmaniaPlayer[]]>>(
     div().class('filter-wrap').nest(
       InputSearch().props({
         placeholder: 'Search maps',
-        modelValue: search,
+        modelValue: searchRaw,
       }).class('flex-1'),
       InputSelect().props({
         label: 'Environment',

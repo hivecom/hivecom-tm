@@ -2,6 +2,7 @@ import type { TrackmaniaMap, TrackmaniaRecord } from '../types'
 import { button, computed, div, effect, fragment, hr, img, Link, nav, onRouteResolve, p, ref, shallowRef, span, strong } from '@dolanske/pantry'
 import { getMaps, getRecords, RECORDS_FETCH_TIMEOUT } from '../api'
 import { showStyledMapnames, showStyledUsernames } from '../config'
+import { toHTML } from '../util/format'
 import { timeAgo } from '../util/time'
 import { throttle } from '../util/timing'
 import Dropdown from './Dropdown'
@@ -66,20 +67,20 @@ export default function () {
           span('Newest record!'),
           p(
             // @ts-expect-error Undefined won't be shown to the UI
-            strong().html(() => showStyledUsernames ? record.value?.playerStyled : record.value?.player),
+            strong().html(() => showStyledUsernames.value ? record.value?.playerStyled : record.value?.player),
             'drove',
             strong(() => record.value?.time),
             'on',
             // @ts-expect-error Undefined won't be shown to the UI
-            strong().html(() => showStyledMapnames ? map.value?.name_styled : map.value.name),
+            strong().html(() => showStyledMapnames.value ? map.value?.name_styled : map.value.name),
           ),
           p(() => timeAgo(Number(`${record.value?.unixDate}000`))),
         )
       }),
       div().class('flex-1'),
       Dropdown().props({
-        button: 'Config',
-        buttonClass: 'form-item',
+        button: toHTML(Icon.gear),
+        buttonClass: 'form-item confg-btn',
         content: fragment().nest([
           div().class('flex between align w-100').nest(
             span(() => isDark.value ? 'Use light theme' : 'Use dark theme'),
@@ -114,9 +115,12 @@ export default function () {
         .setup((ctx) => {
           // Scrolling check
           const showScrollUp = ref(false)
-          window.addEventListener('scroll', throttle(() => {
+
+          const updater = throttle(() => {
             showScrollUp.value = window.scrollY > 256
-          }, 50))
+          }, 50)
+
+          window.addEventListener('scroll', () => updater())
           ctx.class({ active: showScrollUp })
         })
         .class('scroll-up')

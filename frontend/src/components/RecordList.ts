@@ -15,7 +15,7 @@ export default reusable<Props>('ul', (ctx, props) => {
       .nest(
         span(`#${index + 1}`),
         Player().props({
-          player: () => showStyledUsernames ? record.playerStyled : record.player,
+          player: () => showStyledUsernames.value ? record.playerStyled : record.player,
           country: record.country,
         }),
         strong(record.time).attr('data-title-left', `Driven ${timeAgo(Number(`${record.unixDate}000`))}`),

@@ -45,3 +45,9 @@ export function convertMsToTime(ms: number): string {
 
   return formatted
 }
+
+export function toHTML(string: string) {
+  const div = document.createElement('div')
+  div.innerHTML = string
+  return div.firstChild
+}

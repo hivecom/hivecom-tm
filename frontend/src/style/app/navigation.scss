@@ -1,5 +1,5 @@
 .navigation {
-  @include flex(16px);
+  @include flex(8px);
   position: relative;
   width: 100%;
   padding: 40px;
@@ -7,12 +7,28 @@
 
   --links-height: 42px;
 
+  .confg-btn {
+    width: 42px;
+    justify-content: center;
+    padding-inline: 0 !important;
+
+    &:hover {
+      background-color: var(--color-bg-light-hover);
+    }
+
+    svg {
+      transform: translate(0);
+    }
+  }
+
   .nav-links {
     display: grid;
     gap: 0;
     border-radius: calc(var(--links-height) / 2);
     height: var(--links-height);
     background-color: var(--color-bg-light);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
 
     a {
       @include t();
