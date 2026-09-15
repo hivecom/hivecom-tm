@@ -1,6 +1,6 @@
 import type { Component } from '@dolanske/pantry'
 
-export function onClickOutside(ctx: Component<any>, onClose: () => void) {
+export function onClickOutside(ctx: Component<any, any>, onClose: () => void) {
   function handler(e: MouseEvent) {
     if (e.target && ctx.el && !ctx.el.contains(e.target as HTMLElement)) {
       onClose()
