@@ -10,6 +10,7 @@ export interface TrackmaniaMap {
 export interface TrackmaniaRecord {
   mapId: number
   player: string
+  playerStyled: string
   country: string
   time: string
   date: string
@@ -18,6 +19,7 @@ export interface TrackmaniaRecord {
 
 export interface TrackmaniaPlayer {
   name: string
+  name_styled: string
   country: string
   maps: number
   records: number
@@ -25,6 +27,7 @@ export interface TrackmaniaPlayer {
     id: number
     date: string
     map_name: string
+    map_name_styled: string
     time: string
     unix_date: number
   }

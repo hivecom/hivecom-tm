@@ -4,6 +4,7 @@ import { computed, div, Link, p, ref, span, strong, table, tbody, td, th, thead,
 
 import InputSearch from '../components/form/InputSearch'
 import Player from '../components/Player'
+import { showStyledMapnames, showStyledUsernames } from '../config'
 import { searchInStr } from '../util/search-in'
 import { timeAgo } from '../util/time'
 
@@ -35,18 +36,20 @@ export default div<RouteProps<TrackmaniaPlayer[]>>().setup((ctx, props) => {
           ]),
         ),
         tbody().for(toRender, (item, index) => {
-          const { name, country, records, maps, latest } = item
+          const { name, country, records, maps, latest, name_styled } = item
+
+          const playerName = computed(() => showStyledUsernames ? name_styled : name)
           return tr().key(name).nest([
             td().nest([
               span(`#${index + 1}`).class('player-position'),
-              Player().props({ player: name, country }),
+              Player().props({ player: playerName, country }),
             ]),
             latest
               ? td().nest(
                   Link('/records', [
                     p().class('latest-record').nest(
                       strong(latest.time),
-                      span(latest.map_name),
+                      span().html(() => showStyledMapnames ? latest.map_name_styled : latest.map_name),
                     ),
                     span(timeAgo(Number(`${latest.unix_date}000`))),
                   ], { hash: latest.id }),

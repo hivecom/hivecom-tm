@@ -49,9 +49,6 @@ export default div<RouteProps<[number[], TrackmaniaMap[], TrackmaniaPlayer[]]>>(
   const sortOptions = ['Name', 'Activity', 'Most played', 'Least played']
   const sort = ref('')
 
-  // Checkboxes
-  const showFormattedNames = ref(true)
-
   // Apply filters
   const toRender = computed(() => $maps.value
     // Make sure every selected player is in the map's saved records
@@ -211,18 +208,14 @@ export default div<RouteProps<[number[], TrackmaniaMap[], TrackmaniaPlayer[]]>>(
         options: plaOptions,
         modelValue: plaFilter,
         single: true,
-      }).attr('data-title-left', 'Show specific player\'s records'),
+      }),
       InputSelect().props({
         label: 'Sort',
         options: sortOptions,
         modelValue: sort,
         showSearch: false,
         single: true,
-      }).attr('data-title-left', 'Sort maps'),
-      // InputCheckbox().props({
-      //   modelValue: showFormattedNames,
-      //   icon: Icon.palette,
-      // }).attr('data-title-left', 'Show formatted map names'),
+      }),
       button()
         .html(Icon.timer)
         .class('button form-item round-btn')
@@ -248,7 +241,6 @@ export default div<RouteProps<[number[], TrackmaniaMap[], TrackmaniaPlayer[]]>>(
           .on('interaction', () => activeMapId.value = -1)
           .props({
             map,
-            showFormattedNames,
             isNewRecord: computed(() => $records.value.includes(map.id)),
           })
       }),

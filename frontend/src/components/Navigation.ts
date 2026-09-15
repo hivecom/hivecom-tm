@@ -1,7 +1,7 @@
-import type { TrackmaniaRecord } from '../types'
+import type { TrackmaniaMap, TrackmaniaRecord } from '../types'
 import { button, computed, div, effect, fragment, hr, img, Link, nav, onRouteResolve, p, ref, shallowRef, span, strong } from '@dolanske/pantry'
 import { getMaps, getRecords, RECORDS_FETCH_TIMEOUT } from '../api'
-import { config, showStyledMapnames, showStyledUsernames } from '../config'
+import { showStyledMapnames, showStyledUsernames } from '../config'
 import { timeAgo } from '../util/time'
 import { throttle } from '../util/timing'
 import Dropdown from './Dropdown'
@@ -28,6 +28,19 @@ export default function () {
     loading.value = false
   })
 
+  // Theme
+  const isDark = ref(isDefaultDark())
+
+  effect(() => {
+    localStorage.setItem('dark-theme', String(isDark.value))
+    if (isDark.value)
+      document.documentElement.classList.add('dark-theme')
+    else
+      document.documentElement.classList.remove('dark-theme')
+  })
+
+  const buttonIcon = computed(() => isDark.value ? Icon.sun : Icon.moon)
+
   return fragment().nest(
     LoadingBar().prop('active', loading),
     nav().class('navigation').nest(
@@ -37,26 +50,28 @@ export default function () {
       // Latest record fetching & display
       div().setup((ctx) => {
         const record = shallowRef<TrackmaniaRecord>()
-        const mapName = ref()
+        const map = ref<TrackmaniaMap>()
 
         async function check() {
           const item = await getRecords().then(data => record.value = data[0])
-          mapName.value = (await getMaps()).find(m => m.id === item.mapId)?.name
+          map.value = (await getMaps()).find(m => m.id === item.mapId)
         }
 
         check()
         setInterval(check, RECORDS_FETCH_TIMEOUT)
 
         ctx.class('nav-latest')
-        ctx.show(() => !!mapName.value)
+        ctx.show(() => !!map.value)
         ctx.nest(
           span('Newest record!'),
           p(
-            strong(() => record.value?.player),
+            // @ts-expect-error Undefined won't be shown to the UI
+            strong().html(() => showStyledUsernames ? record.value?.playerStyled : record.value?.player),
             'drove',
             strong(() => record.value?.time),
             'on',
-            strong(() => mapName.value),
+            // @ts-expect-error Undefined won't be shown to the UI
+            strong().html(() => showStyledMapnames ? map.value?.name_styled : map.value.name),
           ),
           p(() => timeAgo(Number(`${record.value?.unixDate}000`))),
         )
@@ -67,24 +82,10 @@ export default function () {
         buttonClass: 'form-item',
         content: fragment().nest([
           div().class('flex between align w-100').nest(
-            span('Use dark theme'),
-            button().setup((ctx) => {
-              const isDark = ref(isDefaultDark())
-
-              effect(() => {
-                localStorage.setItem('dark-theme', String(isDark.value))
-                if (isDark.value)
-                  document.documentElement.classList.add('dark-theme')
-                else
-                  document.documentElement.classList.remove('dark-theme')
-              })
-
-              const buttonIcon = computed(() => isDark.value ? Icon.sun : Icon.moon)
-
-              ctx.class('nav-theme')
-              ctx.class('active', isDark)
-              ctx.click(() => isDark.value = !isDark.value)
-              ctx.html(buttonIcon)
+            span(() => isDark.value ? 'Use light theme' : 'Use dark theme'),
+            InputCheckbox().props({
+              modelValue: isDark,
+              icon: buttonIcon,
             }),
           ),
           hr(),

@@ -1,6 +1,7 @@
 import type { Ref } from '@dolanske/pantry'
 import type { TrackmaniaMap } from '../types'
 import { computed, div, fragment, reusable, span, strong, table, td, th, toValue, tr } from '@dolanske/pantry'
+import { showStyledMapnames, showStyledUsernames } from '../config'
 import { sortRecordsByLatest, sortRecordsByTime } from '../util/common'
 import { convertMsToTime, convertTimeToMs } from '../util/format'
 import { formatDate, timeAgo } from '../util/time'
@@ -9,13 +10,12 @@ import RecordList from './RecordList'
 
 interface Props {
   map: TrackmaniaMap
-  showFormattedNames?: Ref<boolean>
   isNewRecord?: Ref<boolean>
 }
 
 export default reusable<Props>('li', (ctx, props) => {
   const wr = props.map.records[0]
-  const name = computed(() => props.showFormattedNames?.value ? props.map.name_styled : props.map.name)
+  const name = computed(() => showStyledMapnames?.value ? props.map.name_styled : props.map.name)
 
   ctx.class({ 'new-record': () => toValue(props.isNewRecord) === true })
   ctx.class('map-item')
@@ -33,7 +33,7 @@ export default reusable<Props>('li', (ctx, props) => {
       .props({
         button: fragment([
           span().class('map-name styled-name').html(name),
-          strong(wr.player).class('map-player'),
+          strong().html(() => showStyledUsernames ? wr.playerStyled : wr.player).class('map-player'),
           strong(wr.time).class('map-time'),
         ]),
         content: div().class('map-content').nest(

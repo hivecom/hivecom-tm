@@ -46,3 +46,11 @@
     }
   }
 }
+
+:root.dark-theme .form-checkbox input:checked + label {
+  background-color: var(--color-accent);
+
+  svg {
+    color: var(--color-white);
+  }
+}

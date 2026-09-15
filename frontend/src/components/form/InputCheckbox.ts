@@ -1,9 +1,9 @@
-import type { Ref } from '@dolanske/pantry'
+import type { MaybeRef, Ref } from '@dolanske/pantry'
 import { createId, input, label, reusable } from '@dolanske/pantry'
 
 interface Props {
   modelValue: Ref<boolean>
-  icon: string
+  icon: MaybeRef<string>
 }
 
 export default reusable<Props>('div', (ctx, props) => {

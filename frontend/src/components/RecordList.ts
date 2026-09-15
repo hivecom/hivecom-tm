@@ -1,5 +1,6 @@
 import type { TrackmaniaRecord } from '../types'
 import { li, reusable, span, strong } from '@dolanske/pantry'
+import { showStyledUsernames } from '../config'
 import { timeAgo } from '../util/time'
 import Player from './Player'
 
@@ -14,7 +15,7 @@ export default reusable<Props>('ul', (ctx, props) => {
       .nest(
         span(`#${index + 1}`),
         Player().props({
-          player: record.player,
+          player: () => showStyledUsernames ? record.playerStyled : record.player,
           country: record.country,
         }),
         strong(record.time).attr('data-title-left', `Driven ${timeAgo(Number(`${record.unixDate}000`))}`),
