@@ -1,4 +1,4 @@
-import type { Component, ComponentChildren } from '@dolanske/pantry'
+import type { ComponentChildren } from '@dolanske/pantry'
 import { button, div, ref, reusable } from '@dolanske/pantry'
 import { onClickOutside } from '../hooks/onClickOutside'
 
