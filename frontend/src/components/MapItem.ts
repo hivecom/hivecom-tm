@@ -32,7 +32,7 @@ export default reusable<Props>('li', (ctx, props) => {
       })
       .props({
         button: fragment([
-          span().class('map-name').html(name),
+          span().class('map-name styled-name').html(name),
           strong(wr.player).class('map-player'),
           strong(wr.time).class('map-time'),
         ]),
@@ -42,15 +42,6 @@ export default reusable<Props>('li', (ctx, props) => {
               tr([th('Environment'), td(props.map.environment)]),
               tr([th('Author'), td(props.map.author)]),
               tr([th('Players'), td(props.map.records.length)]),
-              tr([
-                th('First play'),
-                td().setup((ctx) => {
-                  const record = sortedRecords.value.at(-1)!
-                  const time = Number(`${record.unixDate}000`)
-                  ctx.text(`${record.player} (${timeAgo(time)})`)
-                  ctx.attr('data-title-top', formatDate(time))
-                }),
-              ]),
               tr([
                 th('Latest play'),
                 td().setup((ctx) => {

@@ -1,8 +1,11 @@
 import type { TrackmaniaRecord } from '../types'
-import { button, computed, div, effect, fragment, img, Link, nav, onRouteResolve, p, ref, shallowRef, span, strong } from '@dolanske/pantry'
+import { button, computed, div, effect, fragment, hr, img, Link, nav, onRouteResolve, p, ref, shallowRef, span, strong } from '@dolanske/pantry'
 import { getMaps, getRecords, RECORDS_FETCH_TIMEOUT } from '../api'
+import { config, showStyledMapnames, showStyledUsernames } from '../config'
 import { timeAgo } from '../util/time'
 import { throttle } from '../util/timing'
+import Dropdown from './Dropdown'
+import InputCheckbox from './form/InputCheckbox'
 import { Icon } from './Icon'
 import LoadingBar from './LoadingBar'
 
@@ -59,24 +62,48 @@ export default function () {
         )
       }),
       div().class('flex-1'),
-      button().setup((ctx) => {
-        const isDark = ref(isDefaultDark())
+      Dropdown().props({
+        button: 'Config',
+        buttonClass: 'form-item',
+        content: fragment().nest([
+          div().class('flex between align w-100').nest(
+            span('Use dark theme'),
+            button().setup((ctx) => {
+              const isDark = ref(isDefaultDark())
 
-        effect(() => {
-          localStorage.setItem('dark-theme', String(isDark.value))
-          if (isDark.value)
-            document.documentElement.classList.add('dark-theme')
-          else
-            document.documentElement.classList.remove('dark-theme')
-        })
+              effect(() => {
+                localStorage.setItem('dark-theme', String(isDark.value))
+                if (isDark.value)
+                  document.documentElement.classList.add('dark-theme')
+                else
+                  document.documentElement.classList.remove('dark-theme')
+              })
 
-        const buttonIcon = computed(() => isDark.value ? Icon.sun : Icon.moon)
+              const buttonIcon = computed(() => isDark.value ? Icon.sun : Icon.moon)
 
-        ctx.class('nav-theme')
-        ctx.class('active', isDark)
-        ctx.click(() => isDark.value = !isDark.value)
-        ctx.html(buttonIcon)
-        ctx.attr('data-title-left', 'Switch Theme')
+              ctx.class('nav-theme')
+              ctx.class('active', isDark)
+              ctx.click(() => isDark.value = !isDark.value)
+              ctx.html(buttonIcon)
+            }),
+          ),
+          hr(),
+          div().class('flex between align w-100').nest(
+            span('Show styled player names'),
+            InputCheckbox().props({
+              modelValue: showStyledUsernames,
+              icon: Icon.checkmark,
+            }),
+          ),
+          hr(),
+          div().class('flex between align w-100').nest(
+            span('Show styled map names'),
+            InputCheckbox().props({
+              modelValue: showStyledMapnames,
+              icon: Icon.checkmark,
+            }),
+          ),
+        ]),
       }),
       div()
         .class('nav-links')

@@ -114,27 +114,27 @@
       text-overflow: ellipsis;
       white-space: nowrap;
 
-      span {
-        color: inherit;
-        font-weight: inherit;
-      }
+      // span {
+      //   color: inherit;
+      //   font-weight: inherit;
+      // }
 
-      .wide {
-        letter-spacing: 0.15em;
-      }
+      // .wide {
+      //   letter-spacing: 0.15em;
+      // }
 
-      .bold {
-        @include font(700);
-        font-weight: 700;
-      }
+      // .bold {
+      //   @include font(700);
+      //   font-weight: 700;
+      // }
 
-      .shadow {
-        text-shadow: 1px 1px 1px rgba(0, 0, 0, 08);
-      }
+      // .shadow {
+      //   text-shadow: 1px 1px 1px rgba(0, 0, 0, 08);
+      // }
 
-      .italic {
-        font-style: italic;
-      }
+      // .italic {
+      //   font-style: italic;
+      // }
     }
 
     .map-player,

@@ -1,9 +1,6 @@
 import type { Component, MaybeRef } from '@dolanske/pantry'
 import { button, div, isRef, ref, reusable, watch } from '@dolanske/pantry'
 
-// FIXME: we need to watch for .detals-content resizing so that if a Details contains Details, they properly resize each other
-// FIXME: if `open` is provided by default, it does not open (could it be because its children aren't mounted?)
-
 interface Props {
   button: Component<any>
   content: Component<any>

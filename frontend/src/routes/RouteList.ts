@@ -219,10 +219,10 @@ export default div<RouteProps<[number[], TrackmaniaMap[], TrackmaniaPlayer[]]>>(
         showSearch: false,
         single: true,
       }).attr('data-title-left', 'Sort maps'),
-      InputCheckbox().props({
-        modelValue: showFormattedNames,
-        icon: Icon.palette,
-      }).attr('data-title-left', 'Show formatted map names'),
+      // InputCheckbox().props({
+      //   modelValue: showFormattedNames,
+      //   icon: Icon.palette,
+      // }).attr('data-title-left', 'Show formatted map names'),
       button()
         .html(Icon.timer)
         .class('button form-item round-btn')

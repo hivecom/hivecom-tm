@@ -42,8 +42,6 @@ export default reusable<Props, Emits>('div', (ctx, props) => {
   ctx.if(() => props.open.value)
 
   ctx.nest(
-    div(
-      props.content,
-    ).class('modal-content'),
+    div(props.content).class('modal-content'),
   )
 })

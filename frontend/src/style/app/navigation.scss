@@ -3,6 +3,7 @@
   position: relative;
   width: 100%;
   padding: 40px;
+  z-index: 1500;
 
   --links-height: 42px;
 
@@ -16,7 +17,7 @@
     a {
       @include t();
       @include font(700);
-      width: 144px;
+      width: 132px;
       text-align: center;
       font-size: 1.6rem;
       height: var(--links-height);

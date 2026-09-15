@@ -2,6 +2,16 @@
   position: relative;
   z-index: 100;
 
+  &.config {
+    .form-select-dropdown {
+      padding: 8px;
+      width: 292px;
+    }
+    .select-button {
+      padding-right: 16px;
+    }
+  }
+
   &.has-input {
     background-color: var(--color-bg-light-hover);
   }
