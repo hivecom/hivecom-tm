@@ -1,6 +1,6 @@
 # Hivecom TM
 
-Trackmania maps & stored by Xaseco, the Trackmania Forever server plugin system
+Trackmania maps & records stored by Xaseco, the Trackmania Forever server plugin system
 with custom front-end including map / player statistics, hunting suggestions and
 advanced filtering options. 
 
