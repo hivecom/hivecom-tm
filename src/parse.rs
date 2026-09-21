@@ -87,10 +87,11 @@ impl Tag {
     }
 
     fn color(hex: &str) -> Self {
-        let (r, g, b) = (&hex[0..1], &hex[1..2], &hex[2..3]);
-        let r = u8::from_str_radix(r, 16).unwrap_or(0);
-        let g = u8::from_str_radix(g, 16).unwrap_or(0);
-        let b = u8::from_str_radix(b, 16).unwrap_or(0);
+        let mut chars = hex.chars();
+        let (r, g, b) = (chars.next(), chars.next(), chars.next());
+        let r = r.unwrap_or('0').to_digit(16).unwrap_or(0) as u8;
+        let g = g.unwrap_or('0').to_digit(16).unwrap_or(0) as u8;
+        let b = b.unwrap_or('0').to_digit(16).unwrap_or(0) as u8;
 
         // Copy lower half of the byte into upper half
         Self::Color(r | r << 4, g | g << 4, b | b << 4)
@@ -177,6 +178,25 @@ mod tests {
             Fragment::Text("V"),
             Fragment::Tag(Color(255, 255, 255)),
             Fragment::Text("ogene"),
+        ];
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn cool_island() {
+        let input = "$w$s$i$b$a«««$0f0CooL Evening";
+
+        let actual = map_name(input).unwrap();
+
+        let expected = vec![
+            Fragment::Tag(Wide),
+            Fragment::Tag(Shadowed),
+            Fragment::Tag(Italic),
+            Fragment::Tag(Color(170, 0, 0)),
+            Fragment::Text("«"),
+            Fragment::Tag(Color(0, 255, 0)),
+            Fragment::Text("CooL Evening"),
         ];
 
         assert_eq!(expected, actual);
