@@ -7,7 +7,7 @@ default_color = { "g" }
 bold = { "o" }
 reset = { "z" }
 capitals = { "t" }
-color = { (HEX_DIGIT){3} }
+color = { (!"$" ~ ANY){3} }
 
 tag = {
     "$$" |

@@ -88,9 +88,9 @@ impl Tag {
 
     fn color(hex: &str) -> Self {
         let (r, g, b) = (&hex[0..1], &hex[1..2], &hex[2..3]);
-        let r = u8::from_str_radix(r, 16).unwrap();
-        let g = u8::from_str_radix(g, 16).unwrap();
-        let b = u8::from_str_radix(b, 16).unwrap();
+        let r = u8::from_str_radix(r, 16).unwrap_or(0);
+        let g = u8::from_str_radix(g, 16).unwrap_or(0);
+        let b = u8::from_str_radix(b, 16).unwrap_or(0);
 
         // Copy lower half of the byte into upper half
         Self::Color(r | r << 4, g | g << 4, b | b << 4)
@@ -129,6 +129,7 @@ mod tests {
             Fragment::Tag(Shadowed),
             Fragment::Tag(Italic),
             Fragment::Tag(Color(170, 255, 170)),
+            Fragment::Tag(Color(170, 255, 0)),
             Fragment::Text("Fortuna atra"),
             Fragment::Tag(Wide),
             Fragment::Text("ction"),
@@ -158,6 +159,24 @@ mod tests {
             Fragment::Text("z"),
             Fragment::Tag(Color(255, 136, 255)),
             Fragment::Text("y"),
+        ];
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn vogene() {
+        let input = "$w$i$fobV$fffogene";
+
+        let actual = map_name(input).unwrap();
+
+        let expected = vec![
+            Fragment::Tag(Wide),
+            Fragment::Tag(Italic),
+            Fragment::Tag(Color(255, 0, 187)),
+            Fragment::Text("V"),
+            Fragment::Tag(Color(255, 255, 255)),
+            Fragment::Text("ogene"),
         ];
 
         assert_eq!(expected, actual);
